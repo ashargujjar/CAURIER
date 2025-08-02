@@ -1,0 +1,10 @@
+const express = require("express");
+const auth = require("../auth/auth").authorization;
+const usercontroller = require("../controller/user");
+const router = express.Router();
+router.post("/login", usercontroller.login);
+router.post("/signup", usercontroller.signup);
+router.post("/parcel/create", auth, usercontroller.createParcel);
+router.get("/user/parcel", auth, usercontroller.getParcels);
+router.get("/parcel/:parcelId", usercontroller.getParcelDetails);
+module.exports = router;
