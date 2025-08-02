@@ -12,7 +12,6 @@ export const Viewparcel = () => {
         const resp = await fetch(`http://localhost:3000/parcel/${id}`);
         if (!resp.ok) throw new Error("Failed to fetch parcel data");
         const data = await resp.json();
-        console.log(data);
         setDetails(data);
       } catch (err) {
         console.error("Error:", err.message);
@@ -103,10 +102,12 @@ export const Viewparcel = () => {
             </h3>
             <div className="text-sm text-gray-700 space-y-1">
               <p>
-                <span className="font-semibold">Name:</span> Ali Raza
+                <span className="font-semibold">Name:</span>
+                {details.assignedRider.name}
               </p>
               <p>
-                <span className="font-semibold">Phone:</span> +92 312 3456789
+                <span className="font-semibold">Phone: </span>
+                {details.assignedRider.phone}
               </p>
             </div>
           </div>
@@ -134,8 +135,9 @@ export const Viewparcel = () => {
             {(details.status === "Assigned" ||
               details.status === "Intransit" ||
               details.status === "Delivered") && (
-              <li className="mb-5 ml-4">
-                <div className="absolute w-3 h-3 bg-green-500 rounded-full -left-1.5 top-1.5 border border-white"></div>
+              <li className="mb-5 ml-4 ">
+                <div className="absolute w-3 h-3 bg-green-500 rounded-full -left-1.5   border border-white"></div>
+
                 <p className="font-semibold">Assigned to Rider</p>
                 <p className="text-xs text-gray-500">
                   {Get_formatedDate(details.riderAssignedDate)}
@@ -145,7 +147,7 @@ export const Viewparcel = () => {
             {(details.status === "Intransit" ||
               details.status === "Delivered") && (
               <li className="mb-5 ml-4">
-                <div className="absolute w-3 h-3 bg-yellow-500 rounded-full -left-1.5 top-1.5 border border-white"></div>
+                <div className="absolute w-3 h-3 bg-yellow-500 rounded-full -left-1.5  border border-white"></div>
                 <p className="font-semibold">In Transit</p>
                 <p className="text-xs text-gray-500">
                   {Get_formatedDate(details.inTransitDate)}
@@ -154,7 +156,7 @@ export const Viewparcel = () => {
             )}
             {details.status === "Delivered" && (
               <li className="ml-4">
-                <div className="absolute w-3 h-3 bg-gray-300 rounded-full -left-1.5 top-1.5 border border-white"></div>
+                <div className="absolute w-3 h-3 bg-gray-300 rounded-full -left-1.5  border border-white"></div>
                 <p className="font-semibold text-gray-400">Delivered</p>
                 <p className="text-xs text-gray-500">
                   {Get_formatedDate(details.DeliveredDate)}

@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 export const Ridernav = () => {
   return (
     <nav className="bg-emerald-600 text-white w-full p-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-6">
-      <Link to="/rider/dasboard">
-        {" "}
+      <Link to="/rider/dashboard">
         <h1 className="text-xl font-bold">Rider Dashboard</h1>
       </Link>
 

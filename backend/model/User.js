@@ -52,6 +52,10 @@ class User {
     }
     return response;
   }
+  static async getRiders() {
+    const riders = await UserModel.find({ role: "rider" });
+    return riders;
+  }
 }
 
 module.exports = User;

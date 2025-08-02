@@ -7,4 +7,5 @@ router.post("/signup", usercontroller.signup);
 router.post("/parcel/create", auth, usercontroller.createParcel);
 router.get("/user/parcel", auth, usercontroller.getParcels);
 router.get("/parcel/:parcelId", usercontroller.getParcelDetails);
+router.get("/rider/info/:id", usercontroller.getRiderInfo);
 module.exports = router;

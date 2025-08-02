@@ -49,7 +49,13 @@ export default function Login() {
       const data = await resp.json();
       cookie.set("token", data.token);
       cookie.set("role", user.role);
-      navigate("/user/dashboard");
+      if (user.role === "user") {
+        navigate("/user/dashboard");
+      } else if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (user.role === "rider") {
+        navigate("/rider/dashboard");
+      }
     } else {
       err();
       isLoading(false);

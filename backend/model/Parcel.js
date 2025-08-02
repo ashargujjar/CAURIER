@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
+const User = require("./User");
+const UserSchema = require("./schemas/shemas").UserCreate;
+
 const ParcelSchema = require("./schemas/shemas").CreateParcel;
 const AssignmentSchema = require("./schemas/shemas").AssignRider;
+const UserModel = mongoose.model("User", UserSchema);
 
 const ParcelModal = mongoose.model("makeparcels", ParcelSchema);
 const Assign = mongoose.model("AssignParcel", AssignmentSchema);
@@ -38,19 +42,52 @@ class Parcel {
       riderId: riderId,
     });
     if (parcel.length <= 0) {
-      return await Assign.create({
+      const assigned = await Assign.create({
         parcelId: parcelId,
         riderId: riderId,
       });
+      const sevenDaysLater = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+      const options = { year: "numeric", month: "long", day: "2-digit" };
+      const formatted = sevenDaysLater.toLocaleDateString("en-US", options);
+
+      const [month, day, year] = formatted.replace(",", "").split(" ");
+      const customFormatted = `${year}-${month}-${day}`;
+      const rider = await UserModel.findOne({ _id: riderId });
+      const updateStatus = await ParcelModal.updateOne(
+        { _id: parcelId },
+        {
+          $set: {
+            status: "Assigned",
+            eta: customFormatted,
+            riderAssignedDate: new Date(Date.now()),
+            "assignedRider.name": rider.name,
+            "assignedRider.phone": rider.phone,
+          },
+          rider: "Assigned",
+        }
+      );
+      return { success: true };
     } else {
-      return parcel;
+      return { success: false };
     }
   }
-  static async getCountforAdmin(adminId) {
+  static async getCountforAdmin() {
     const totalParcels = await ParcelModal.countDocuments();
-    const pending = await Parcel.countDocuments({ status: "Pending" });
-    const delivered = await Parcel.countDocuments({ status: "Delivered" });
-    const assigned = await Parcel.countDocuments({ status: "Assigned" });
+    const pending = await ParcelModal.countDocuments({ status: "Pending" });
+    const delivered = await ParcelModal.countDocuments({ status: "Delivered" });
+    const assigned = await ParcelModal.countDocuments({ status: "Assigned" });
+    const info = {
+      totalParcels,
+      pending,
+      delivered,
+      assigned,
+    };
+    return info;
+  }
+  static async getAllParcels() {
+    const parcels = await ParcelModal.find();
+    return parcels;
   }
 }
 module.exports = Parcel;

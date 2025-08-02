@@ -31,6 +31,14 @@ exports.CreateParcel = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  eta: String,
+  riderAssignedDate: Date,
+  inTransitDate: Date,
+  DeliveredDate: Date,
+  assignedRider: {
+    name: String,
+    phone: String,
+  },
 });
 
 exports.AssignRider = new mongoose.Schema({
@@ -39,5 +47,9 @@ exports.AssignRider = new mongoose.Schema({
   status: {
     type: String,
     default: "Pending",
+  },
+  riderAssignedDate: {
+    type: Date,
+    default: Date.now,
   },
 });

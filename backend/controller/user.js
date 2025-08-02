@@ -63,7 +63,13 @@ exports.getParcelDetails = async (req, res) => {
   return res.status(201).json(parcel);
 };
 exports.assignRider = async (req, res) => {
+  console.log(req.body);
   const { parcelId, riderId } = req.body;
   const rider = await Parcel.assignRider(parcelId, riderId);
-  return res.status(201).json(rider);
+  if (rider.success) {
+    return res.status(201).json(rider);
+  } else {
+    res.status(301).json("rider already assinrd");
+  }
 };
+exports.getRiderInfo = async (req, res) => {};

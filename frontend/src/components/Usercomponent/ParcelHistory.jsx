@@ -64,7 +64,15 @@ export const ParcelHistory = () => {
                 <tr className="border-b hover:bg-gray-50" key={parcel._id}>
                   <td className="px-4 py-3 font-medium">#PCL-{parcel._id}</td>
                   <td className="px-4 py-3">
-                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700">
+                    <span
+                      className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                        parcel.status === "Pending" && "bg-black"
+                      }  ${parcel.status === "Assigned" && "bg-yellow-500"} ${
+                        parcel.status === "Intransit" && "bg-red-500"
+                      }  ${parcel.status === "Assigned" && "bg-yellow-500"} ${
+                        parcel.status === "Delivered" && "bg-green-500"
+                      } text-white `}
+                    >
                       {parcel.status}
                       {/* color change on state change */}
                     </span>
@@ -78,7 +86,7 @@ export const ParcelHistory = () => {
                   </td>
                   <td className="px-4 py-3">{parcel.rider}</td>
                   {/* estimated arrival time eta */}
-                  <td className="px-4 py-3 text-xl">
+                  <td className="px-4 py-3 text-md">
                     {parcel.eta ? parcel.eta : "---"}
                   </td>
                   <td className="px-4 py-3 text-center">

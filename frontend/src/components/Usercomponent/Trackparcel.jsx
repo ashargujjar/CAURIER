@@ -84,8 +84,14 @@ const TrackParcel = () => {
             {parcel.rider !== "not assigned" && (
               <div>
                 <p className="font-medium text-gray-600">Rider Info:</p>
-                <p className="text-gray-800">{rider.name}</p>
-                <p className="text-gray-600">{rider.phone}</p>
+                <p className="text-gray-800">
+                  <span className="font-normal">Name: </span>
+                  {parcel.assignedRider.name}
+                </p>
+                <p className="text-gray-600">
+                  <span className="font-normal">Phone: </span>
+                  {parcel.assignedRider.phone}
+                </p>
               </div>
             )}
           </div>

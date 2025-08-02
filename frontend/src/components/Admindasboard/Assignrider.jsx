@@ -1,33 +1,55 @@
 import React, { useState, useEffect } from "react";
 import { AdminNav } from "./adminNav";
 import { useSearchParams } from "react-router-dom";
-
+import { toast, ToastContainer } from "react-toastify";
 const AssignRider = () => {
   const [parcelId, setParcelId] = useState("");
   const [selectedRider, setSelectedRider] = useState("");
   const [searchParams] = useSearchParams();
-
+  const [riders, setRiders] = useState([]);
+  const [loading, setLoading] = useState(false);
   const id = searchParams.get("parcelId");
 
-  const riders = [
-    { id: "r1", name: "Rider A" },
-    { id: "r2", name: "Rider B" },
-    { id: "r3", name: "Rider C" },
-  ];
-
-  const handleAssign = () => {
+  const handleAssign = async () => {
     if (!parcelId || !selectedRider) return alert("Please fill all fields");
-    // Call backend API to assign rider here
-    console.log(`Assigning Rider ${selectedRider} to Parcel ${parcelId}`);
+    setLoading(true);
+    const resp = await fetch("http://localhost:3000/admin/assignRider", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        parcelId: parcelId,
+        riderId: selectedRider,
+      }),
+    });
+    if (resp.ok) {
+      setLoading(false);
+      toast.success("Rider assigned succesfull");
+    } else {
+      setLoading(false);
+      toast.error("Rider already assigned or try again");
+    }
   };
   useEffect(() => {
     if (id) {
       setParcelId(id);
     }
+    async function getRiders() {
+      setLoading(true);
+      const resp = await fetch("http://localhost:3000/admin/getRiders");
+      if (resp.ok) {
+        const body = await resp.json();
+        setRiders(body);
+        setLoading(false);
+      }
+    }
+    getRiders();
   }, [id]);
 
   return (
     <>
+      <ToastContainer />
       <AdminNav />
       <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
         <h2 className="text-xl font-bold mb-4">Assign Rider to Parcel</h2>
@@ -52,20 +74,35 @@ const AssignRider = () => {
             onChange={(e) => setSelectedRider(e.target.value)}
           >
             <option value="">-- Select Rider --</option>
-            {riders.map((rider) => (
-              <option key={rider.id} value={rider.id}>
-                {rider.name}
-              </option>
-            ))}
+            {loading ? (
+              <span class="loading loading-spinner loading-md"></span>
+            ) : riders.length > 0 ? (
+              riders.map((rider) => (
+                <option key={rider._id} value={rider._id}>
+                  {rider.name}
+                </option>
+              ))
+            ) : (
+              <p>No rider availaible</p>
+            )}
           </select>
         </div>
 
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={handleAssign}
-        >
-          Assign
-        </button>
+        {loading ? (
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            disabled
+          >
+            <span class="loading loading-spinner loading-md"></span>
+          </button>
+        ) : (
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            onClick={handleAssign}
+          >
+            Assign
+          </button>
+        )}
       </div>
     </>
   );

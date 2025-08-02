@@ -1,32 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AdminNav } from "./adminNav";
 import { Link } from "react-router-dom";
-
-const parcelsData = [
-  {
-    id: "TRK123",
-    receiver: "Ali Khan",
-    status: "Pending",
-    date: "2025-07-25",
-    user: "user1@example.com",
-    phone: "03001234567",
-    pickup: "Karachi",
-    delivery: "Lahore",
-    weight: "2kg",
-    description: "Electronics",
-    rider: "Rider A",
-    timeline: "Pending",
-  },
-  // Add more mock parcels
-];
 
 export const AllParcels = () => {
   const [filterStatus, setFilterStatus] = useState("");
   const [selectedParcel, setSelectedParcel] = useState(null);
+  const [parcelsData, setParcelsData] = useState([]);
 
+  // Filter based on status
   const filteredParcels = parcelsData.filter((p) => {
     return filterStatus ? p.status === filterStatus : true;
   });
+
+  // Fetch parcels on mount
+  useEffect(() => {
+    async function Get_allParcels() {
+      const resp = await fetch("http://localhost:3000/admin/allParcels");
+      if (resp.ok) {
+        const body = await resp.json();
+        setParcelsData(body);
+      }
+    }
+    Get_allParcels();
+  }, []);
 
   return (
     <>
@@ -46,8 +42,6 @@ export const AllParcels = () => {
             <option value="In Transit">In Transit</option>
             <option value="Delivered">Delivered</option>
           </select>
-
-          {/* Add Date and User filters if needed */}
         </div>
 
         {/* Parcel Table */}
@@ -64,36 +58,31 @@ export const AllParcels = () => {
           </thead>
           <tbody>
             {filteredParcels.map((parcel) => (
-              <tr key={parcel.id} className="border-t">
-                <td className="px-4 py-2">{parcel.id}</td>
-                <td className="px-4 py-2">{parcel.receiver}</td>
+              <tr key={parcel._id} className="border-t">
+                <td className="px-4 py-2">{parcel._id}</td>
+                <td className="px-4 py-2">{parcel.recieverName}</td>
                 <td className="px-4 py-2">{parcel.status}</td>
-                <td className="px-4 py-2">{parcel.date}</td>
-                <td className="px-4 py-2">{parcel.user}</td>
                 <td className="px-4 py-2">
-                  {parcel.status === "Pending" ? (
-                    <div className="flex items-center gap-4">
-                      <button
-                        className="text-blue-500 hover:underline"
-                        onClick={() => setSelectedParcel(parcel)}
-                      >
-                        View
-                      </button>
-                      <Link
-                        to={`/admin/assign?parcelId=${parcel.id}`}
-                        className="text-blue-500 hover:underline"
-                      >
-                        Assign Rider
-                      </Link>
-                    </div>
-                  ) : (
+                  {new Date(parcel.created).toLocaleDateString()}
+                </td>
+                <td className="px-4 py-2">{parcel.userId}</td>
+                <td className="px-4 py-2">
+                  <div className="flex items-center gap-4">
                     <button
                       className="text-blue-500 hover:underline"
                       onClick={() => setSelectedParcel(parcel)}
                     >
                       View
                     </button>
-                  )}
+                    {parcel.status === "Pending" && (
+                      <Link
+                        to={`/admin/assign?parcelId=${parcel._id}`}
+                        className="text-blue-500 hover:underline"
+                      >
+                        Assign Rider
+                      </Link>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -113,25 +102,26 @@ export const AllParcels = () => {
               <h3 className="text-xl font-bold mb-4">Parcel Details</h3>
               <div className="space-y-2">
                 <p>
-                  <strong>Tracking ID:</strong> {selectedParcel.id}
+                  <strong>Tracking ID:</strong> {selectedParcel._id}
                 </p>
                 <p>
-                  <strong>Receiver:</strong> {selectedParcel.receiver}
+                  <strong>Receiver:</strong> {selectedParcel.recieverName}
                 </p>
                 <p>
                   <strong>Phone:</strong> {selectedParcel.phone}
                 </p>
                 <p>
-                  <strong>Pickup:</strong> {selectedParcel.pickup}
+                  <strong>Pickup:</strong> {selectedParcel.pickupAddress}
                 </p>
                 <p>
-                  <strong>Delivery:</strong> {selectedParcel.delivery}
+                  <strong>Delivery:</strong> {selectedParcel.deliveryAddress}
                 </p>
                 <p>
-                  <strong>Weight:</strong> {selectedParcel.weight}
+                  <strong>Weight:</strong> {selectedParcel.parcelWeight}
                 </p>
                 <p>
-                  <strong>Description:</strong> {selectedParcel.description}
+                  <strong>Description:</strong>{" "}
+                  {selectedParcel.parcelDescription}
                 </p>
                 <p>
                   <strong>Status:</strong> {selectedParcel.status}
@@ -140,8 +130,8 @@ export const AllParcels = () => {
                   <strong>Rider:</strong> {selectedParcel.rider || "Unassigned"}
                 </p>
                 <p>
-                  <strong>Tracking Timeline:</strong> <br />
-                  {selectedParcel.timeline}
+                  <strong>Created:</strong>{" "}
+                  {new Date(selectedParcel.created).toLocaleString()}
                 </p>
               </div>
             </div>
