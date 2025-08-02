@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
+import { Nav as HomeNav } from "../homeComponent/Nav";
+import { useSearchParams } from "react-router-dom";
 
 const TrackParcel = () => {
   const [trackingId, setTrackingId] = useState("");
   const [parcel, setParcel] = useState(null); // Simulated parcel info
-  const [parcels, setparcels] = useState();
-
-  const handleTrack = () => {
+  const [loading, setLoading] = useState(false);
+  const [rider, setRider] = useState();
+  const handleTrack = async () => {
     // Simulate fetching data
-    setParcel({
-      id: trackingId,
-      status: "In Transit",
-      rider: {
-        name: "Ali Khan",
-        phone: "03XX-XXXXXXX",
-      },
-      timeline: ["Created", "Assigned", "In Transit", "Delivered"],
-    });
+
+    try {
+      setLoading(true);
+      const resp = await fetch(`http://localhost:3000/parcel/${trackingId}`);
+      if (!resp.ok) throw new Error("Failed to fetch parcel data");
+      const data = await resp.json();
+      console.log(data);
+      setParcel(data);
+    } catch (err) {
+      console.error("Error:", err.message);
+    }
+    setLoading(false);
   };
+  const [searchParams] = useSearchParams();
+  const home = searchParams.get("home");
 
   return (
     <>
-      <Nav />
+      {home === "true" ? <HomeNav /> : <Nav />}
 
       <div className="max-w-2xl mx-auto p-6">
         <h1 className="text-3xl font-bold mb-4 text-center text-gray-800">
@@ -36,58 +43,51 @@ const TrackParcel = () => {
             placeholder="Enter Tracking ID"
             className="input input-bordered w-full"
           />
-          <button
-            onClick={handleTrack}
-            className="btn bg-blue-600 text-white hover:bg-blue-700"
-          >
-            Track
-          </button>
+          {!loading ? (
+            <button
+              onClick={handleTrack}
+              className="btn bg-blue-600 text-white hover:bg-blue-700"
+            >
+              Track
+            </button>
+          ) : (
+            <button
+              disabled
+              className="btn bg-blue-600 text-white hover:bg-blue-700"
+            >
+              <span class="loading loading-spinner loading-lg"></span>
+            </button>
+          )}
         </div>
 
         {parcel && (
           <div className="bg-white shadow rounded-xl p-6 space-y-4 border border-gray-200">
             <h2 className="text-xl font-semibold text-gray-700">
-              Tracking ID: <span className="text-gray-900">{parcel.id}</span>
+              Tracking ID: <span className="text-gray-900">{parcel._id}</span>
             </h2>
 
             <div>
               <p className="font-medium text-gray-600">Current Status:</p>
-              <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-700">
+              <span
+                className={`inline-block px-3 py-1 text-sm font-semibold rounded-full  text-white  ${
+                  parcel.status === "Pending" && "bg-black"
+                }  ${parcel.status === "Assigned" && "bg-yellow-500"} ${
+                  parcel.status === "Intransit" && "bg-red-500"
+                }  ${parcel.status === "Assigned" && "bg-yellow-500"} ${
+                  parcel.status === "Delivered" && "bg-green-500"
+                }`}
+              >
                 {parcel.status}
               </span>
             </div>
 
-            {parcel.rider && (
+            {parcel.rider !== "not assigned" && (
               <div>
                 <p className="font-medium text-gray-600">Rider Info:</p>
-                <p className="text-gray-800">{parcel.rider.name}</p>
-                <p className="text-gray-600">{parcel.rider.phone}</p>
+                <p className="text-gray-800">{rider.name}</p>
+                <p className="text-gray-600">{rider.phone}</p>
               </div>
             )}
-
-            <div>
-              <p className="font-medium text-gray-600 mb-2">
-                Tracking Timeline:
-              </p>
-              <div className="flex items-center space-x-4">
-                {parcel.timeline.map((stage, index) => (
-                  <div key={stage} className="flex items-center">
-                    <div
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        index <= parcel.timeline.indexOf(parcel.status)
-                          ? "bg-green-500 text-white"
-                          : "bg-gray-200 text-gray-600"
-                      }`}
-                    >
-                      {stage}
-                    </div>
-                    {index < parcel.timeline.length - 1 && (
-                      <div className="w-6 h-0.5 bg-gray-300 mx-2"></div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         )}
       </div>

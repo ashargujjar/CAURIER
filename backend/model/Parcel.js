@@ -46,5 +46,11 @@ class Parcel {
       return parcel;
     }
   }
+  static async getCountforAdmin(adminId) {
+    const totalParcels = await ParcelModal.countDocuments();
+    const pending = await Parcel.countDocuments({ status: "Pending" });
+    const delivered = await Parcel.countDocuments({ status: "Delivered" });
+    const assigned = await Parcel.countDocuments({ status: "Assigned" });
+  }
 }
 module.exports = Parcel;

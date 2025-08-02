@@ -1,13 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import cookie from "js-cookie";
+
 const Nav = () => {
+  const navigate = useNavigate();
+  function handleLogout() {
+    cookie.remove("token");
+    cookie.remove("roll");
+    localStorage.clear();
+    navigate("/");
+  }
   return (
     <nav className="relative z-50">
       <div className="navbar bg-emerald-800 text-gray-800 shadow-sm flex flex-col md:flex-row md:justify-between items-center px-6 py-4 space-y-4 md:space-y-0">
         {/* Logo */}
         <div>
-          <Link to="/">
-            {" "}
+          <Link to="/user/dashboard">
             <h1 className="text-2xl font-bold text-white">SwiftTrack</h1>
           </Link>
         </div>
@@ -32,12 +40,12 @@ const Nav = () => {
           >
             Parcel History
           </Link>
-          <Link
-            to="/logout"
+          <button
+            onClick={handleLogout}
             className="btn focus-none w-full md:w-auto px-6 py-2 bg-emerald-700 hover:bg-black text-white hover:text-white transition duration-300 rounded-l border-none text-xl shadow-none"
           >
             Logout
-          </Link>
+          </button>
         </div>
       </div>
     </nav>

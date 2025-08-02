@@ -25,7 +25,7 @@ const router = createBrowserRouter([
   { path: "/user/dashboard", element: <UserDashboard /> },
   { path: "/parcel/create", element: <CreateParcel /> },
   { path: "/parcel/history", element: <ParcelHistory /> },
-  { path: "/view/parcel", element: <Viewparcel /> },
+  { path: "/view/parcel/:id", element: <Viewparcel /> },
   { path: "/parcel/track", element: <TrackParcel /> },
   { path: "/admin/dashboard", element: <Admin /> },
   { path: "/admin/parcels", element: <AllParcels /> },

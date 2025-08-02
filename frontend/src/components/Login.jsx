@@ -170,7 +170,7 @@ export default function Login() {
                   disabled
                   className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
-                  Login in...
+                  <span class="loading loading-spinner loading-lg duration-200"></span>
                 </button>
               </div>
             )}

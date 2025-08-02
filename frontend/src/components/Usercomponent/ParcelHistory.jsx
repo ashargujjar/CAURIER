@@ -76,11 +76,14 @@ export const ParcelHistory = () => {
                       day: "numeric",
                     })}
                   </td>
-                  <td className="px-4 py-3">Ali Raza</td>
-                  <td className="px-4 py-3">July 28</td>
+                  <td className="px-4 py-3">{parcel.rider}</td>
+                  {/* estimated arrival time eta */}
+                  <td className="px-4 py-3 text-xl">
+                    {parcel.eta ? parcel.eta : "---"}
+                  </td>
                   <td className="px-4 py-3 text-center">
                     <Link
-                      to="/view/parcel"
+                      to={`/view/parcel/${parcel._id}`}
                       className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition duration-300"
                     >
                       <svg

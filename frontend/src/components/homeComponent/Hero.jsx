@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -18,12 +19,18 @@ export const Hero = () => {
           Your Reliable Logistics & Parcel Tracking Partner
         </h3>
         <div className="flex  justify-center items-center  mt-8 space-x-5 md:flex-row">
-          <button className="btn bg-emerald-500 px-7 duration-200 rounded border-none hover:bg-opacity-90 shadow-none text-white hover:-translate-y-1 ">
+          <Link
+            to="/login"
+            className="btn bg-emerald-500 px-7 duration-200 rounded border-none hover:bg-opacity-90 shadow-none text-white hover:-translate-y-1 "
+          >
             Login
-          </button>
-          <button className="btn   bg-emerald-500  px-7 duration-200 rounded border-none hover:bg-opacity-90 shadow-none text-white hover:-translate-y-1 ">
+          </Link>
+          <Link
+            to="/parcel/track?home=true"
+            className="btn   bg-emerald-500  px-7 duration-200 rounded border-none hover:bg-opacity-90 shadow-none text-white hover:-translate-y-1 "
+          >
             Track
-          </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -20,6 +20,7 @@ export const UserDashboard = () => {
           par="Easily register and schedule your parcel for pickup or drop-off. Fill in the destination, parcel details, and sender/receiver information to get started."
           img={createparcelImg}
           btn={"Create Parcel now"}
+          link="/parcel/create"
         />
         <UserCards
           title="Track Parcel"
@@ -27,6 +28,7 @@ export const UserDashboard = () => {
 "
           img={trackImg}
           btn={"Track now"}
+          link={"/parcel/track"}
         />{" "}
         <UserCards
           title="Parcel History"
@@ -35,6 +37,7 @@ export const UserDashboard = () => {
 "
           img={histImg}
           btn={"View history"}
+          link={"/parcel/history"}
         />
       </div>
     </div>
