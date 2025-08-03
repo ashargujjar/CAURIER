@@ -3,7 +3,6 @@ services:
   - type: web
     name: tcs-backend
     env: node
-    plan: free
     buildCommand: cd backend && npm ci --only=production
     startCommand: cd backend && npm start
     envVars:
@@ -23,7 +22,6 @@ services:
   - type: web
     name: tcs-frontend
     env: static
-    plan: free
     buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/build
     envVars:
@@ -34,4 +32,3 @@ databases:
   # MongoDB Database
   - name: tcs-mongodb
     databaseName: tcs_db
-    plan: free
