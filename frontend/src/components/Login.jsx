@@ -26,6 +26,8 @@ export default function Login() {
     const backendUrl = process.env.REACT_APP_BACKENDURL;
 
     const resp = await fetch(`${backendUrl}/login`, {
+      credentials: "include",
+
       headers: {
         "Content-Type": "application/json",
       },

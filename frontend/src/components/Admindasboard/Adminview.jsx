@@ -1,14 +1,23 @@
 import { useEffect, useState } from "react";
-
+import cookie from "js-cookie";
 export default function AdminDashboard() {
   const [details, setDetails] = useState({});
   const [Loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const token = cookie.get("token");
     setLoading(true);
     async function getDetails() {
       const backendUrl = process.env.REACT_APP_BACKENDURL;
-      const resp = await fetch(`${backendUrl}/admin/view`);
+      const resp = await fetch(`${backendUrl}/admin/view`, {
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (resp.ok) {
         const body = await resp.json();
         console.log(body);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AdminNav } from "./adminNav";
 import { useSearchParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import cookie from "js-cookie";
 const AssignRider = () => {
   const [parcelId, setParcelId] = useState("");
   const [selectedRider, setSelectedRider] = useState("");
@@ -9,16 +10,19 @@ const AssignRider = () => {
   const [riders, setRiders] = useState([]);
   const [loading, setLoading] = useState(false);
   const id = searchParams.get("parcelId");
+  const token = cookie.get("token");
+  const backendUrl = process.env.REACT_APP_BACKENDURL;
 
   const handleAssign = async () => {
-    const backendUrl = process.env.REACT_APP_BACKENDURL;
-
     if (!parcelId || !selectedRider) return alert("Please fill all fields");
     setLoading(true);
     const resp = await fetch(`${backendUrl}/admin/assignRider`, {
       method: "POST",
+      credentials: "include",
+
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         parcelId: parcelId,
@@ -39,10 +43,28 @@ const AssignRider = () => {
     }
     async function getRiders() {
       setLoading(true);
-      const resp = await fetch("http://localhost:3000/admin/getRiders");
-      if (resp.ok) {
-        const body = await resp.json();
-        setRiders(body);
+      try {
+        const resp = await fetch(`${backendUrl}/admin/getRiders`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (resp.ok) {
+          const body = await resp.json();
+          setRiders(body);
+        } else {
+          const errText = await resp.text();
+          console.error("Failed to get riders:", resp.status, errText);
+          toast.error("Failed to fetch riders.");
+        }
+      } catch (err) {
+        console.error("Network error:", err);
+        toast.error("Network error while fetching riders.");
+      } finally {
         setLoading(false);
       }
     }
@@ -74,20 +96,24 @@ const AssignRider = () => {
             className="w-full border px-3 py-2 rounded"
             value={selectedRider}
             onChange={(e) => setSelectedRider(e.target.value)}
+            disabled={loading || riders.length === 0}
           >
             <option value="">-- Select Rider --</option>
-            {loading ? (
-              <span class="loading loading-spinner loading-md"></span>
-            ) : riders.length > 0 ? (
-              riders.map((rider) => (
-                <option key={rider._id} value={rider._id}>
-                  {rider.name}
-                </option>
-              ))
-            ) : (
-              <p>No rider availaible</p>
-            )}
+            {riders.map((rider) => (
+              <option key={rider._id} value={rider._id}>
+                {rider.name}
+              </option>
+            ))}
           </select>
+          {loading && (
+            <div className="text-sm text-gray-500 mt-2">
+              <span className="loading loading-spinner loading-md"></span>{" "}
+              Loading...
+            </div>
+          )}
+          {!loading && riders.length === 0 && (
+            <p className="text-sm text-red-500 mt-2">No rider available</p>
+          )}
         </div>
 
         {loading ? (

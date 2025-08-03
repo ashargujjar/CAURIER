@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
 import { Nav as HomeNav } from "../homeComponent/Nav";
 import { useSearchParams } from "react-router-dom";
+import cookie from "js-cookie";
 
 const TrackParcel = () => {
   const [trackingId, setTrackingId] = useState("");
@@ -12,10 +13,18 @@ const TrackParcel = () => {
     // Simulate fetching data
 
     try {
+      const token = cookie.get("token");
       setLoading(true);
       const backendUrl = process.env.REACT_APP_BACKENDURL;
 
-      const resp = await fetch(`${backendUrl}/parcel/${trackingId}`);
+      const resp = await fetch(`${backendUrl}/parcel/${trackingId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      });
       if (!resp.ok) throw new Error("Failed to fetch parcel data");
       const data = await resp.json();
       console.log(data);

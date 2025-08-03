@@ -11,6 +11,8 @@ export const ParcelHistory = () => {
 
       const resp = await fetch(`${backendUrl}/user/parcel`, {
         method: "GET",
+        credentials: "include",
+
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${token}`,
@@ -18,7 +20,6 @@ export const ParcelHistory = () => {
       });
       if (resp.ok) {
         const parcels = await resp.json();
-        console.log(parcels);
         setparcels(parcels);
       } else {
       }

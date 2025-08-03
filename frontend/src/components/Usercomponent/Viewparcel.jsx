@@ -1,17 +1,25 @@
 import React, { use, useEffect, useState } from "react";
 import Nav from "./Nav";
 import { useParams } from "react-router-dom";
-
+import cookie from "js-cookie";
 export const Viewparcel = () => {
   const { id } = useParams();
   const [details, setDetails] = useState(null);
 
   useEffect(() => {
+    const token = cookie.get("token");
     async function getParcelDetails() {
       try {
         const backendUrl = process.env.REACT_APP_BACKENDURL;
 
-        const resp = await fetch(`${backendUrl}/parcel/${id}`);
+        const resp = await fetch(`${backendUrl}/parcel/${id}`, {
+          credentials: "include",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
+          },
+        });
         if (!resp.ok) throw new Error("Failed to fetch parcel data");
         const data = await resp.json();
         setDetails(data);

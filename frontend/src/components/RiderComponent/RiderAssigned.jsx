@@ -16,6 +16,8 @@ const AssignedParcels = () => {
 
         const response = await fetch(`${backendUrl}/rider/parcels`, {
           method: "GET",
+          credentials: "include",
+
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

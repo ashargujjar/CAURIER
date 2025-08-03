@@ -43,6 +43,8 @@ export default function CreateParcel() {
 
       const resp = await fetch(`${backendUrl}/parcel/create`, {
         method: "POST",
+        credentials: "include",
+
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${token}`,
@@ -162,7 +164,7 @@ export default function CreateParcel() {
                 Parcel Weight (optional)
               </label>
               <input
-                type="text"
+                type="number"
                 placeholder="e.g. 2.5 kg"
                 onChange={handleChange}
                 name="parcelWeight"

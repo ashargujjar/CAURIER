@@ -26,6 +26,8 @@ const UpdateParcelStatus = () => {
       const response = await fetch(
         `${backendUrl}/rider/updateStatus/${trackingId}`,
         {
+          credentials: "include",
+
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

@@ -21,6 +21,8 @@ export const UserHero = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
+
           method: "GET",
         });
 

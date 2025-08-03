@@ -21,8 +21,11 @@ const RiderProfile = () => {
         const backendUrl = process.env.REACT_APP_BACKENDURL;
         const response = await fetch(`${backendUrl}/user/data  `, {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
+
           method: "GET",
         });
 

@@ -1,0 +1,37 @@
+services:
+  # Backend API Service
+  - type: web
+    name: tcs-backend
+    env: node
+    plan: free
+    buildCommand: cd backend && npm ci --only=production
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGO_URL
+        sync: false
+      - key: SECRET
+        sync: false
+      - key: FRONTEND_URL
+        value: https://tcs-frontend.onrender.com
+    healthCheckPath: /health
+
+  # Frontend Service
+  - type: web
+    name: tcs-frontend
+    env: static
+    plan: free
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: frontend/build
+    envVars:
+      - key: REACT_APP_BACKENDURL
+        value: https://tcs-backend.onrender.com
+
+databases:
+  # MongoDB Database
+  - name: tcs-mongodb
+    databaseName: tcs_db
+    plan: free

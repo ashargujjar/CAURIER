@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AdminNav } from "./adminNav";
 import { Link } from "react-router-dom";
-
+import cookie from "js-cookie";
 export const AllParcels = () => {
   const [filterStatus, setFilterStatus] = useState("");
   const [selectedParcel, setSelectedParcel] = useState(null);
@@ -16,8 +16,15 @@ export const AllParcels = () => {
   useEffect(() => {
     async function Get_allParcels() {
       const backendUrl = process.env.REACT_APP_BACKENDURL;
-
-      const resp = await fetch(`${backendUrl}/admin/allParcels`);
+      const token = cookie.get("token");
+      const resp = await fetch(`${backendUrl}/admin/allParcels`, {
+        credentials: "include",
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (resp.ok) {
         const body = await resp.json();
         setParcelsData(body);

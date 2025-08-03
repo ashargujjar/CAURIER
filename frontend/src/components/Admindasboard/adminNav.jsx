@@ -1,8 +1,8 @@
 import React from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import cookie from "js-cookie";
 export const AdminNav = () => {
-  const navigate = Navigate();
+  const navigate = useNavigate();
   function handlelogout() {
     cookie.remove("role");
     cookie.remove("token");
@@ -26,7 +26,7 @@ export const AdminNav = () => {
         </li>
         <li>
           <button onClick={handlelogout} className="hover:text-blue-400">
-            Update Status
+            Logout
           </button>
         </li>
       </ul>

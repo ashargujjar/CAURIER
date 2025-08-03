@@ -11,6 +11,8 @@ const RiderDashboard = () => {
       const backendUrl = process.env.REACT_APP_BACKENDURL;
 
       const resp = await fetch(`${backendUrl}/rider/dashboard`, {
+        credentials: "include",
+
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${token}`,
