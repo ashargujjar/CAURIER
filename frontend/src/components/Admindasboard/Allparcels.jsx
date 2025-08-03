@@ -41,7 +41,7 @@ export const AllParcels = () => {
           >
             <option value="">All Status</option>
             <option value="Pending">Pending</option>
-            <option value="In Transit">In Transit</option>
+            <option value="Intransit">In Transit</option>
             <option value="Delivered">Delivered</option>
           </select>
         </div>

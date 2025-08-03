@@ -1,7 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
+import { Link, Navigate } from "react-router-dom";
+import cookie from "js-cookie";
 export const AdminNav = () => {
+  const navigate = Navigate();
+  function handlelogout() {
+    cookie.remove("role");
+    cookie.remove("token");
+    navigate("/");
+  }
   return (
     <nav className="bg-gray-800 text-white w-full flex items-center justify-between px-6 py-4 shadow-md">
       <Link to="/admin/dashboard">
@@ -19,9 +25,9 @@ export const AdminNav = () => {
           </Link>
         </li>
         <li>
-          <Link to="/admin/status" className="hover:text-blue-400">
+          <button onClick={handlelogout} className="hover:text-blue-400">
             Update Status
-          </Link>
+          </button>
         </li>
       </ul>
     </nav>
