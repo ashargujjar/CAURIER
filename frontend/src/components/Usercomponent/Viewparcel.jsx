@@ -9,7 +9,9 @@ export const Viewparcel = () => {
   useEffect(() => {
     async function getParcelDetails() {
       try {
-        const resp = await fetch(`http://localhost:3000/parcel/${id}`);
+        const backendUrl = process.env.REACT_APP_BACKENDURL;
+
+        const resp = await fetch(`${backendUrl}/parcel/${id}`);
         if (!resp.ok) throw new Error("Failed to fetch parcel data");
         const data = await resp.json();
         setDetails(data);

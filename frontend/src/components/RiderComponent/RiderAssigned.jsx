@@ -11,7 +11,9 @@ const AssignedParcels = () => {
   useEffect(() => {
     async function fetchParcels() {
       try {
-        const response = await fetch("http://localhost:3000/rider/parcels", {
+        const backendUrl = process.env.REACT_APP_BACKENDURL;
+
+        const response = await fetch(`${backendUrl}/rider/parcels`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

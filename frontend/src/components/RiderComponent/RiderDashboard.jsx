@@ -8,7 +8,9 @@ const RiderDashboard = () => {
     setLoading(true);
 
     async function getRiderdashboardInfo() {
-      const resp = await fetch("http://localhost:3000/rider/dashboard", {
+      const backendUrl = process.env.REACT_APP_BACKENDURL;
+
+      const resp = await fetch(`${backendUrl}/rider/dashboard`, {
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${token}`,

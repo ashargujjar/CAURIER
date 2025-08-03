@@ -7,7 +7,9 @@ export const ParcelHistory = () => {
   const [parcels, setparcels] = useState([]);
   useEffect(() => {
     async function FetchParcels() {
-      const resp = await fetch("http://localhost:3000/user/parcel", {
+      const backendUrl = process.env.REACT_APP_BACKENDURL;
+
+      const resp = await fetch(`${backendUrl}/user/parcel`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

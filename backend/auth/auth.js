@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 // secret key need to hide
-const secret = "you love$ ashar sakina";
+const secret = process.env.SECRET;
 
 exports.authorization = (req, res, next) => {
   const authHeader = req.headers.authorization;

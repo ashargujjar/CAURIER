@@ -38,7 +38,9 @@ export default function Signup() {
     e.preventDefault();
 
     isLoading(true);
-    const resp = await fetch("http://localhost:3000/signup", {
+    const backendUrl = process.env.REACT_APP_BACKENDURL;
+
+    const resp = await fetch(`${backendUrl}/signup`, {
       headers: {
         "Content-Type": "application/json",
       },

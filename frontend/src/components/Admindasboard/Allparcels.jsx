@@ -15,7 +15,9 @@ export const AllParcels = () => {
   // Fetch parcels on mount
   useEffect(() => {
     async function Get_allParcels() {
-      const resp = await fetch("http://localhost:3000/admin/allParcels");
+      const backendUrl = process.env.REACT_APP_BACKENDURL;
+
+      const resp = await fetch(`${backendUrl}/admin/allParcels`);
       if (resp.ok) {
         const body = await resp.json();
         setParcelsData(body);

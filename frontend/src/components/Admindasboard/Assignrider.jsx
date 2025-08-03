@@ -11,9 +11,11 @@ const AssignRider = () => {
   const id = searchParams.get("parcelId");
 
   const handleAssign = async () => {
+    const backendUrl = process.env.REACT_APP_BACKENDURL;
+
     if (!parcelId || !selectedRider) return alert("Please fill all fields");
     setLoading(true);
-    const resp = await fetch("http://localhost:3000/admin/assignRider", {
+    const resp = await fetch(`${backendUrl}/admin/assignRider`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

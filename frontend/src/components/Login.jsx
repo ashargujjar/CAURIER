@@ -23,7 +23,9 @@ export default function Login() {
     e.preventDefault();
 
     isLoading(true);
-    const resp = await fetch("http://localhost:3000/login", {
+    const backendUrl = process.env.REACT_APP_BACKENDURL;
+
+    const resp = await fetch(`${backendUrl}/login`, {
       headers: {
         "Content-Type": "application/json",
       },

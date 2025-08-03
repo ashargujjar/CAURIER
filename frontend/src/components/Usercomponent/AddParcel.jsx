@@ -39,7 +39,9 @@ export default function CreateParcel() {
     e.preventDefault();
     setLoading(true);
     try {
-      const resp = await fetch("http://localhost:3000/parcel/create", {
+      const backendUrl = process.env.REACT_APP_BACKENDURL;
+
+      const resp = await fetch(`${backendUrl}/parcel/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

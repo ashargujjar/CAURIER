@@ -2,7 +2,7 @@ const User = require("../model/User");
 const Parcel = require("../model/Parcel");
 const jwt = require("jsonwebtoken");
 // secret
-const secret = "you love$ ashar sakina";
+const secret = process.env.SECRET;
 exports.login = async (req, res) => {
   const { role, email, password } = req.body;
   const resp = await User.checkUsernamePassword(role, email, password);

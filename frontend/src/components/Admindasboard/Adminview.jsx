@@ -7,7 +7,8 @@ export default function AdminDashboard() {
   useEffect(() => {
     setLoading(true);
     async function getDetails() {
-      const resp = await fetch("http://localhost:3000/admin/view");
+      const backendUrl = process.env.REACT_APP_BACKENDURL;
+      const resp = await fetch(`${backendUrl}/admin/view`);
       if (resp.ok) {
         const body = await resp.json();
         console.log(body);

@@ -21,8 +21,10 @@ const UpdateParcelStatus = () => {
     setLoading(true);
 
     try {
+      const backendUrl = process.env.REACT_APP_BACKENDURL;
+
       const response = await fetch(
-        `http://localhost:3000/rider/updateStatus/${trackingId}`,
+        `${backendUrl}/rider/updateStatus/${trackingId}`,
         {
           method: "PUT",
           headers: {

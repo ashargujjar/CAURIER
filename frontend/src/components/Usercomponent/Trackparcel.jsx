@@ -13,7 +13,9 @@ const TrackParcel = () => {
 
     try {
       setLoading(true);
-      const resp = await fetch(`http://localhost:3000/parcel/${trackingId}`);
+      const backendUrl = process.env.REACT_APP_BACKENDURL;
+
+      const resp = await fetch(`${backendUrl}/parcel/${trackingId}`);
       if (!resp.ok) throw new Error("Failed to fetch parcel data");
       const data = await resp.json();
       console.log(data);
