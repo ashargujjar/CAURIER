@@ -1,6 +1,32 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import cookie from "js-cookie";
 const RiderDashboard = () => {
+  const [dashboardData, setDashboardData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const token = cookie.get("token");
+  useEffect(() => {
+    setLoading(true);
+
+    async function getRiderdashboardInfo() {
+      const resp = await fetch("http://localhost:3000/rider/dashboard", {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        method: "GET",
+      });
+      if (resp.ok) {
+        setLoading(false);
+
+        const body = await resp.json();
+        setDashboardData(body);
+      } else {
+        setLoading(false);
+        console.log("error accoured in loading");
+      }
+    }
+    getRiderdashboardInfo();
+  }, []);
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold text-emerald-700 mb-6">
@@ -13,7 +39,13 @@ const RiderDashboard = () => {
           <h2 className="text-lg font-semibold text-gray-700">
             Assigned Parcels
           </h2>
-          <p className="text-3xl font-bold text-emerald-600 mt-2">12</p>
+          {loading ? (
+            <span className="loading loading-spinner loading-md"></span>
+          ) : (
+            <p className="text-3xl font-bold text-emerald-600 mt-2">
+              {dashboardData.assignedParcels}
+            </p>
+          )}
           <p className="text-sm text-gray-500">
             Total parcels currently assigned to you
           </p>
@@ -24,7 +56,13 @@ const RiderDashboard = () => {
           <h2 className="text-lg font-semibold text-gray-700">
             Delivered Parcels
           </h2>
-          <p className="text-3xl font-bold text-emerald-600 mt-2">30</p>
+          {loading ? (
+            <span className="loading loading-spinner loading-md"></span>
+          ) : (
+            <p className="text-3xl font-bold text-emerald-600 mt-2">
+              {dashboardData.Delivered}
+            </p>
+          )}
           <p className="text-sm text-gray-500">
             Parcels successfully delivered
           </p>
@@ -35,7 +73,13 @@ const RiderDashboard = () => {
           <h2 className="text-lg font-semibold text-gray-700">
             Status Updates Needed
           </h2>
-          <p className="text-3xl font-bold text-yellow-500 mt-2">3</p>
+          {loading ? (
+            <span className="loading loading-spinner loading-md"></span>
+          ) : (
+            <p className="text-3xl font-bold text-yellow-500 mt-2">
+              {dashboardData.UpdatesNeeded}
+            </p>
+          )}
           <p className="text-sm text-gray-500">
             Parcels awaiting status update
           </p>

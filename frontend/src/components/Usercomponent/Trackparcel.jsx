@@ -75,7 +75,7 @@ const TrackParcel = () => {
                   parcel.status === "Intransit" && "bg-red-500"
                 }  ${parcel.status === "Assigned" && "bg-yellow-500"} ${
                   parcel.status === "Delivered" && "bg-green-500"
-                }`}
+                } ${parcel.status === "Returned" && "bg-orange-500"}`}
               >
                 {parcel.status}
               </span>

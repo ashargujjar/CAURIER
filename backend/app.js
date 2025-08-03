@@ -3,10 +3,13 @@ const mongooseConnection = require("./database/databse").connection;
 const user = require("./routes/user");
 const admin = require("./routes/admin");
 const cors = require("cors");
+const rider = require("./routes/rider");
+require("dotenv").config();
+
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use("/rider", rider);
 app.use(user);
 app.use(admin);
 mongooseConnection(() => {

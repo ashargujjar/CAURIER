@@ -57,7 +57,9 @@ export const Viewparcel = () => {
                 details.status === "Intransit" && "bg-red-500"
               }  ${details.status === "Assigned" && "bg-yellow-500"} ${
                 details.status === "Delivered" && "bg-green-500"
-              }  rounded-full`}
+              } ${
+                details.status === "Returned" && "bg-orange-500"
+              }   rounded-full`}
             >
               {details.status}
             </span>
@@ -122,7 +124,8 @@ export const Viewparcel = () => {
             {(details.status === "Pending" ||
               details.status === "Assigned" ||
               details.status === "Intransit" ||
-              details.status === "Delivered") && (
+              details.status === "Delivered" ||
+              details.status === "Returned") && (
               <li className="mb-5 ml-4">
                 <div className="absolute w-3 h-3 bg-black rounded-full -left-1.5 top-1.5 border border-white"></div>
                 <p className="font-semibold">Pending Request</p>
@@ -134,7 +137,8 @@ export const Viewparcel = () => {
 
             {(details.status === "Assigned" ||
               details.status === "Intransit" ||
-              details.status === "Delivered") && (
+              details.status === "Delivered" ||
+              details.status === "Returned") && (
               <li className="mb-5 ml-4 ">
                 <div className="absolute w-3 h-3 bg-green-500 rounded-full -left-1.5   border border-white"></div>
 
@@ -145,12 +149,22 @@ export const Viewparcel = () => {
               </li>
             )}
             {(details.status === "Intransit" ||
-              details.status === "Delivered") && (
+              details.status === "Delivered" ||
+              details.status === "Returned") && (
               <li className="mb-5 ml-4">
                 <div className="absolute w-3 h-3 bg-yellow-500 rounded-full -left-1.5  border border-white"></div>
                 <p className="font-semibold">In Transit</p>
                 <p className="text-xs text-gray-500">
                   {Get_formatedDate(details.inTransitDate)}
+                </p>
+              </li>
+            )}
+            {details.status === "Returned" && (
+              <li className="ml-4">
+                <div className="absolute w-3 h-3 bg-orange-300 rounded-full -left-1.5  border border-white"></div>
+                <p className="font-semibold text-gray-400">Returned</p>
+                <p className="text-xs text-gray-500">
+                  {Get_formatedDate(details.ReturnedDate)}
                 </p>
               </li>
             )}

@@ -1,33 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Ridernav } from "./Ridernav";
+import cookie from "js-cookie";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UpdateParcelStatus = () => {
-  const [trackingId, setTrackingId] = useState("");
-  const [status, setStatus] = useState("In Transit");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const trackingFromQuery = queryParams.get("trackingId") || "";
+
+  const [trackingId, setTrackingId] = useState(trackingFromQuery);
+  const [status, setStatus] = useState("Intransit");
+  const [loading, setLoading] = useState(false);
+
+  const token = cookie.get("token");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Replace with actual API call
     try {
-      const response = await fetch(`/api/parcel/${trackingId}/status`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/rider/updateStatus/${trackingId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status }),
+        }
+      );
 
       const data = await response.json();
-      alert("Status updated successfully");
+
+      if (response.ok) {
+        toast.success("Status updated successfully!");
+      } else {
+        toast.error(`Error: ${data.message || "Failed to update status"}`);
+      }
     } catch (error) {
-      console.error("Failed to update status", error);
+      toast.error("Failed to update status. Please try again.");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
       <Ridernav />
+      <ToastContainer />
       <div className="p-4 md:p-8 max-w-xl mx-auto">
         <h2 className="text-2xl font-bold text-emerald-700 mb-6">
           Update Parcel Status
@@ -46,6 +70,7 @@ const UpdateParcelStatus = () => {
               required
               value={trackingId}
               onChange={(e) => setTrackingId(e.target.value)}
+              disabled={!!trackingFromQuery}
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring focus:ring-emerald-300"
               placeholder="Enter Tracking ID"
             />
@@ -60,16 +85,20 @@ const UpdateParcelStatus = () => {
               onChange={(e) => setStatus(e.target.value)}
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring focus:ring-emerald-300"
             >
-              <option>In Transit</option>
-              <option>Delivered</option>
-              <option>Returned</option>
+              <option value="Intransit">Intransit</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Returned">Returned</option>
             </select>
           </div>
 
           <button
             type="submit"
-            className="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-4 py-2 rounded"
+            className="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-4 py-2 rounded flex items-center gap-2"
+            disabled={loading}
           >
+            {loading && (
+              <span className="loading loading-spinner loading-sm"></span>
+            )}
             Update Status
           </button>
         </form>

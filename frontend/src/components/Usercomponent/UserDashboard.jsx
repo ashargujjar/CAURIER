@@ -29,7 +29,7 @@ export const UserDashboard = () => {
           img={trackImg}
           btn={"Track now"}
           link={"/parcel/track"}
-        />{" "}
+        />
         <UserCards
           title="Parcel History"
           par="Stay updated with real-time tracking. Enter your tracking number to check the current location, status, and estimated delivery time of your parcel. Transparency and peace of mind at every step.
