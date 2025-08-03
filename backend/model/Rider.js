@@ -42,14 +42,14 @@ class Rider {
   static async updateStatus(riderId, parcelId, status) {
     const info = {
       success: false,
-      msg: "",
+      message: "",
     };
     let checkReturned = await ParcelModal.findOne({
       _id: parcelId,
       status: "Returned",
     });
     if (checkReturned) {
-      info.mssage = "Parcel already Returned";
+      info.message = "Parcel already Returned";
       return info;
     }
     let checkDelievered = await ParcelModal.findOne({

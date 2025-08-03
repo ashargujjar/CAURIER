@@ -17,23 +17,123 @@ import AssignedParcels from "./components/RiderComponent/RiderAssigned";
 import UpdateParcelStatus from "./components/RiderComponent/updateParcel";
 import RiderProfile from "./components/RiderComponent/RiderProfile";
 import CreateParcel from "./components/Usercomponent/AddParcel";
+import ProtectedRoute from "./components/Protected";
+
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
   { path: "/forgot", element: <ForgotPassword /> },
-  { path: "/user/dashboard", element: <UserDashboard /> },
-  { path: "/parcel/create", element: <CreateParcel /> },
-  { path: "/parcel/history", element: <ParcelHistory /> },
-  { path: "/view/parcel/:id", element: <Viewparcel /> },
-  { path: "/parcel/track", element: <TrackParcel /> },
-  { path: "/admin/dashboard", element: <Admin /> },
-  { path: "/admin/parcels", element: <AllParcels /> },
-  { path: "/admin/assign", element: <AssignRider /> },
-  { path: "/admin/status", element: <ChangeparcelStatus /> },
-  { path: "/rider/dashboard", element: <Rider /> },
-  { path: "/rider/parcels", element: <AssignedParcels /> },
-  { path: "/rider/parcelUpdate", element: <UpdateParcelStatus /> },
-  { path: "/rider/profile", element: <RiderProfile /> },
+
+  // User Routes
+  {
+    path: "/user/dashboard",
+    element: (
+      <ProtectedRoute allowedRoles={["user"]}>
+        <UserDashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/parcel/create",
+    element: (
+      <ProtectedRoute allowedRoles={["user"]}>
+        <CreateParcel />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/parcel/history",
+    element: (
+      <ProtectedRoute allowedRoles={["user"]}>
+        <ParcelHistory />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/view/parcel/:id",
+    element: (
+      <ProtectedRoute allowedRoles={["user"]}>
+        <Viewparcel />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/parcel/track",
+    element: (
+      <ProtectedRoute allowedRoles={["user", "admin", "rider"]}>
+        <TrackParcel />
+      </ProtectedRoute>
+    ),
+  },
+
+  // Admin Routes
+  {
+    path: "/admin/dashboard",
+    element: (
+      <ProtectedRoute allowedRoles={["admin"]}>
+        <Admin />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/parcels",
+    element: (
+      <ProtectedRoute allowedRoles={["admin"]}>
+        <AllParcels />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/assign",
+    element: (
+      <ProtectedRoute allowedRoles={["admin"]}>
+        <AssignRider />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/status",
+    element: (
+      <ProtectedRoute allowedRoles={["admin"]}>
+        <ChangeparcelStatus />
+      </ProtectedRoute>
+    ),
+  },
+
+  // Rider Routes
+  {
+    path: "/rider/dashboard",
+    element: (
+      <ProtectedRoute allowedRoles={["rider"]}>
+        <Rider />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/rider/parcels",
+    element: (
+      <ProtectedRoute allowedRoles={["rider"]}>
+        <AssignedParcels />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/rider/parcelUpdate",
+    element: (
+      <ProtectedRoute allowedRoles={["rider"]}>
+        <UpdateParcelStatus />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/rider/profile",
+    element: (
+      <ProtectedRoute allowedRoles={["rider"]}>
+        <RiderProfile />
+      </ProtectedRoute>
+    ),
+  },
 ]);
+
 export default router;

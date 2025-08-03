@@ -69,7 +69,7 @@ exports.assignRider = async (req, res) => {
   if (rider.success) {
     return res.status(201).json(rider);
   } else {
-    res.status(301).json("rider already assinrd");
+    res.status(301).json("rider already assingned");
   }
 };
 exports.getRiderInfo = async (req, res) => {};
