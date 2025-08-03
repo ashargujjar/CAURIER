@@ -8,4 +8,5 @@ router.post("/parcel/create", auth, usercontroller.createParcel);
 router.get("/user/parcel", auth, usercontroller.getParcels);
 router.get("/parcel/:parcelId", usercontroller.getParcelDetails);
 router.get("/rider/info/:id", usercontroller.getRiderInfo);
+router.get("/user/data", auth, usercontroller.getUserData);
 module.exports = router;

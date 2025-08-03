@@ -72,4 +72,9 @@ exports.assignRider = async (req, res) => {
     res.status(301).json("rider already assingned");
   }
 };
+exports.getUserData = async (req, res) => {
+  const id = req.user.user._id.toString();
+  const user = await User.getUser(id);
+  return res.status(201).json(user);
+};
 exports.getRiderInfo = async (req, res) => {};
